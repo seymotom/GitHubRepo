@@ -26,6 +26,7 @@ class ReposViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationItem.title = "GitHub Repositories"
         setupTableView()
         setupViews()
         setupConstraints()
@@ -98,9 +99,15 @@ class ReposViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.cellForRow(at: indexPath)?.setSelected(false, animated: true)
-        let detailVC = RepoDetailViewController(dataManager: dataManager, repo: dataManager.repos[indexPath.row])
-        if let navVC = navigationController {
-            navVC.pushViewController(detailVC, animated: true)
+        if let cell = tableView.cellForRow(at: indexPath) as? RepoTableViewCell {
+            let descriptionLabelHeight = cell.descriptionLabel.frame.height
+            
+            let detailVC = RepoDetailViewController(dataManager: dataManager, repo: dataManager.repos[indexPath.row], descriptionLabelHeight: descriptionLabelHeight)
+            if let navVC = navigationController {
+                navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.plain, target:nil, action:nil)
+                navVC.pushViewController(detailVC, animated: true)
+            }
+            
         }
     }
 

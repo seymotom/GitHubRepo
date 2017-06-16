@@ -55,7 +55,7 @@ class RepoTableViewCell: UITableViewCell {
        let label = UILabel()
         label.numberOfLines = 1
         label.font = UIFont.systemFont(ofSize: 20)
-        label.textColor = .blue
+        label.textColor = UIView().tintColor
         label.textAlignment = .left
         label.lineBreakMode = NSLineBreakMode.byTruncatingTail
         return label

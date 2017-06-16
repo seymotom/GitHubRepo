@@ -23,6 +23,9 @@
 		DEAF68AE1EF41AC500F2F565 /* IssueDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEAF68AD1EF41AC500F2F565 /* IssueDataManager.swift */; };
 		DEAF68B21EF42AF600F2F565 /* PRDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEAF68B11EF42AF600F2F565 /* PRDataManager.swift */; };
 		DEAF68B61EF42CB700F2F565 /* PullRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEAF68B51EF42CB700F2F565 /* PullRequest.swift */; };
+		DEAF68B81EF4438900F2F565 /* RepoDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEAF68B71EF4438900F2F565 /* RepoDetailView.swift */; };
+		DEAF68BC1EF4666500F2F565 /* DetailSegmentedControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEAF68BB1EF4666400F2F565 /* DetailSegmentedControl.swift */; };
+		DEAF68C01EF47ECD00F2F565 /* PRIssueTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEAF68BF1EF47ECD00F2F565 /* PRIssueTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -46,6 +49,9 @@
 		DEAF68AD1EF41AC500F2F565 /* IssueDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IssueDataManager.swift; sourceTree = "<group>"; };
 		DEAF68B11EF42AF600F2F565 /* PRDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PRDataManager.swift; sourceTree = "<group>"; };
 		DEAF68B51EF42CB700F2F565 /* PullRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PullRequest.swift; sourceTree = "<group>"; };
+		DEAF68B71EF4438900F2F565 /* RepoDetailView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RepoDetailView.swift; sourceTree = "<group>"; };
+		DEAF68BB1EF4666400F2F565 /* DetailSegmentedControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailSegmentedControl.swift; sourceTree = "<group>"; };
+		DEAF68BF1EF47ECD00F2F565 /* PRIssueTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PRIssueTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -142,6 +148,9 @@
 			isa = PBXGroup;
 			children = (
 				DEAF689E1EF1BA8A00F2F565 /* RepoTableViewCell.swift */,
+				DEAF68B71EF4438900F2F565 /* RepoDetailView.swift */,
+				DEAF68BB1EF4666400F2F565 /* DetailSegmentedControl.swift */,
+				DEAF68BF1EF47ECD00F2F565 /* PRIssueTableViewCell.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -284,8 +293,11 @@
 				DEAF689B1EF1B89500F2F565 /* APIManager.swift in Sources */,
 				DEAF68AE1EF41AC500F2F565 /* IssueDataManager.swift in Sources */,
 				DEAF68A81EF32DD400F2F565 /* RepoDetailViewController.swift in Sources */,
+				DEAF68C01EF47ECD00F2F565 /* PRIssueTableViewCell.swift in Sources */,
 				DEAF68B61EF42CB700F2F565 /* PullRequest.swift in Sources */,
 				DEAF68971EF1AF6B00F2F565 /* ReposViewController.swift in Sources */,
+				DEAF68BC1EF4666500F2F565 /* DetailSegmentedControl.swift in Sources */,
+				DEAF68B81EF4438900F2F565 /* RepoDetailView.swift in Sources */,
 				DEAF68A41EF1C62900F2F565 /* User.swift in Sources */,
 				DEAF68A61EF1D0F700F2F565 /* DataManager.swift in Sources */,
 				DEAF68AC1EF40EE700F2F565 /* Issue.swift in Sources */,

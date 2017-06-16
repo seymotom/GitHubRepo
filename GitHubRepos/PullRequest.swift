@@ -27,6 +27,13 @@ class PullRequest {
     let createdDate: Date
     let state: String
     
+    var createdDateString: String {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .long
+        formatter.timeStyle = .medium
+        return "Created at: " + formatter.string(from: self.createdDate)
+    }
+    
     init(title: String, body: String, number: Int, user: User, websiteURL: String, createdDate: Date, state: String) {
         self.title = title
         self.body = body
@@ -40,7 +47,7 @@ class PullRequest {
     convenience init?(json: [String: AnyObject]) {
         guard
             let title = json[IssueField.title.rawValue] as? String,
-            let body = json[IssueField.body.rawValue] as? String,
+            let fullBody = json[IssueField.body.rawValue] as? String,
             let number = json[IssueField.number.rawValue] as? Int,
             let websiteURL = json[IssueField.websiteURL.rawValue] as? String,
             let state = json[IssueField.state.rawValue] as? String,
@@ -51,6 +58,9 @@ class PullRequest {
             else {
                 return nil
         }
+        // limiting the body to 140 characters
+        let body = fullBody.characters.count > 140 ? String(fullBody.characters.dropLast(fullBody.characters.count - 140)) + "..." : fullBody
+
         self.init(title: title, body: body, number: number, user: user,
                   websiteURL: websiteURL, createdDate: createdDate, state: state)
     }
