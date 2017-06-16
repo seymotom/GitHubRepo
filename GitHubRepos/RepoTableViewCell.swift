@@ -50,7 +50,6 @@ class RepoTableViewCell: UITableViewCell {
         }
     }
     
-    
     lazy var repoNameLabel: UILabel = {
        let label = UILabel()
         label.numberOfLines = 1

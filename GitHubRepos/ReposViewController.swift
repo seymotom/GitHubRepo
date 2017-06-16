@@ -9,7 +9,7 @@
 import UIKit
 import SnapKit
 
-class ReposViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class ReposViewController: UIViewController {
     
     var tableView: UITableView = UITableView()
     
@@ -27,6 +27,7 @@ class ReposViewController: UIViewController, UITableViewDelegate, UITableViewDat
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.title = "GitHub Repositories"
+        view.backgroundColor = .white
         setupTableView()
         setupViews()
         setupConstraints()
@@ -43,12 +44,12 @@ class ReposViewController: UIViewController, UITableViewDelegate, UITableViewDat
         tableView.dataSource = self
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 150
+        tableView.separatorStyle = .none
         tableView.register(RepoTableViewCell.self, forCellReuseIdentifier: RepoTableViewCell.identifier)
     }
     
     func setupConstraints() {
         self.edgesForExtendedLayout = []
-        
         tableView.snp.makeConstraints { (view) in
             view.leading.trailing.bottom.top.equalToSuperview()
         }
@@ -61,7 +62,9 @@ class ReposViewController: UIViewController, UITableViewDelegate, UITableViewDat
             }
         }
     }
-    
+}
+
+extension ReposViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return dataManager.repos.count
@@ -83,9 +86,7 @@ class ReposViewController: UIViewController, UITableViewDelegate, UITableViewDat
         cell.profileImageView.image = nil
         cell.repoNameLabel.text = repo.fullName
         cell.descriptionLabel.text = repo.description
-        
-        let veryLightGray = UIColor(red: 0.9, green: 0.9, blue: 0.9, alpha: 1.0)
-        cell.backgroundColor = indexPath.row % 2 == 0 ? veryLightGray : .white
+        cell.backgroundColor = indexPath.row % 2 == 0 ? UIColor.veryLightGray() : .white
         
         APIManager.shared.getData(endpoint: repo.owner.avatarURL) { (data, _) in
             DispatchQueue.main.async {
@@ -107,8 +108,13 @@ class ReposViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.plain, target:nil, action:nil)
                 navVC.pushViewController(detailVC, animated: true)
             }
-            
         }
     }
-
 }
+
+extension UIColor {
+    static func veryLightGray() -> UIColor {
+        return UIColor(red: 0.95, green: 0.95, blue: 0.95, alpha: 1.0)
+    }
+}
+

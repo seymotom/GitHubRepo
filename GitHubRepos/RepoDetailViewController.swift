@@ -22,13 +22,16 @@ class RepoDetailViewController: UIViewController {
     
     var tableView: UITableView = UITableView()
     var repoDetailView: RepoDetailView!
+    let segmentedControl = DetailSegmentedControl()
     
     var repoDisplayType: RepoDisplayType = .issues
+    
+    var totalIssues: Int?
+    var totalPullRequests: Int?
     
     let tableViewHeaderHeight: CGFloat!
     let segmentedControlHeight: CGFloat = 50
     
-    let segmentedControl = DetailSegmentedControl()
     
     init(dataManager: DataManager, repo: Repo, descriptionLabelHeight: CGFloat) {
         self.repo = repo
@@ -64,6 +67,7 @@ class RepoDetailViewController: UIViewController {
         tableView.dataSource = self
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 150
+        tableView.separatorStyle = .none
         tableView.register(PRIssueTableViewCell.self, forCellReuseIdentifier: PRIssueTableViewCell.identifier)
         repoDetailView = RepoDetailView(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: tableViewHeaderHeight))
         tableView.tableHeaderView = repoDetailView
@@ -108,6 +112,7 @@ class RepoDetailViewController: UIViewController {
         
         dataManager.countResults(urlString: repo.issuesURL, field: .issuesURL) { (x) in
             DispatchQueue.main.async {
+                self.totalIssues = x
                 self.repoDetailView.issuesLabel.text = "Issues\n\(String(x))"
             }
         }
@@ -120,6 +125,7 @@ class RepoDetailViewController: UIViewController {
         
         dataManager.countResults(urlString: repo.pullRequestsURL, field: .pullRequestsURL) { (x) in
             DispatchQueue.main.async {
+                self.totalPullRequests = x
                 self.repoDetailView.pullRequestsLabel.text = "Pull Req.\n\(String(x))"
             }
         }
@@ -135,22 +141,23 @@ class RepoDetailViewController: UIViewController {
                 self.repoDetailView.releasesLabel.text = "Releases\n\(String(x))"
             }
         }
-
     }
     
-    
-    func testCalls() {
-        
-        issueDataManager.getMoreIssueData {
-            print("\n list of issues...")
-            dump(self.issueDataManager.issues)
+    func toggleEmptyStateView() {
+        switch repoDisplayType {
+        case.issues:
+            if issueDataManager.issues.isEmpty {
+                tableView.backgroundView = EmptyStateView(frame: tableView.frame, text: "No Results to Display")
+            } else {
+                tableView.backgroundView = nil
+            }
+        case .pullRequests:
+            if prDataManager.pullRequests.isEmpty {
+                tableView.backgroundView = EmptyStateView(frame: tableView.frame, text: "No Results to Display")
+            } else {
+                tableView.backgroundView = nil
+            }
         }
-        
-        prDataManager.getMorePRData {
-            print("\n list of pull requests...")
-            dump(self.prDataManager.pullRequests)
-        }
-
     }
 }
 
@@ -173,8 +180,10 @@ extension RepoDetailViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch repoDisplayType {
         case .issues:
+            toggleEmptyStateView()
             return issueDataManager.issues.count
         case .pullRequests:
+            toggleEmptyStateView()
             return prDataManager.pullRequests.count
         }
     }
@@ -184,15 +193,21 @@ extension RepoDetailViewController: UITableViewDataSource, UITableViewDelegate {
         return configureCell(cell, for: indexPath)
     }
     
+    // tableView is scrolled to the bottom. Fetch more results if there are any.
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         switch repoDisplayType {
         case .issues:
-            if indexPath.row == issueDataManager.issues.count - 1 {
-                print("GET MORE DATA")
+            // if there are more issues to load, load them
+            if let total = totalIssues,
+                indexPath.row == issueDataManager.issues.count - 1,
+                issueDataManager.issues.count < total {
+                loadIssues()
             }
         case .pullRequests:
-            if indexPath.row == prDataManager.pullRequests.count - 1 {
-                print("GET MORE DATA")
+            if let total = totalPullRequests,
+                indexPath.row == prDataManager.pullRequests.count - 1,
+                prDataManager.pullRequests.count < total {
+                loadPullRequests()
             }
         }
     }
@@ -206,9 +221,7 @@ extension RepoDetailViewController: UITableViewDataSource, UITableViewDelegate {
             cell.bodyLabel.text = object.body
             cell.dateLabel.text = object.createdDateString
             cell.userLabel.text = object.user.userName
-            
-            let veryLightGray = UIColor(red: 0.9, green: 0.9, blue: 0.9, alpha: 1.0)
-            cell.backgroundColor = indexPath.row % 2 == 0 ? veryLightGray : .white
+            cell.backgroundColor = indexPath.row % 2 == 0 ? UIColor.veryLightGray() : .white
             
             APIManager.shared.getData(endpoint: object.user.avatarURL) { (data, _) in
                 DispatchQueue.main.async {
@@ -226,9 +239,7 @@ extension RepoDetailViewController: UITableViewDataSource, UITableViewDelegate {
             cell.bodyLabel.text = object.body
             cell.dateLabel.text = object.createdDateString
             cell.userLabel.text = object.user.userName
-            
-            let veryLightGray = UIColor(red: 0.9, green: 0.9, blue: 0.9, alpha: 1.0)
-            cell.backgroundColor = indexPath.row % 2 == 0 ? veryLightGray : .white
+            cell.backgroundColor = indexPath.row % 2 == 0 ? UIColor.veryLightGray() : .white
             
             APIManager.shared.getData(endpoint: object.user.avatarURL) { (data, _) in
                 DispatchQueue.main.async {
@@ -247,6 +258,20 @@ extension RepoDetailViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return segmentedControlHeight
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.cellForRow(at: indexPath)?.setSelected(false, animated: true)
+        switch repoDisplayType {
+        case .issues:
+            if let url = URL(string: issueDataManager.issues[indexPath.row].websiteURL) {
+                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            }
+        case .pullRequests:
+            if let url = URL(string: prDataManager.pullRequests[indexPath.row].websiteURL) {
+                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            }
+        }
     }
 
     
