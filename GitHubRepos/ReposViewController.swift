@@ -88,7 +88,8 @@ extension ReposViewController: UITableViewDelegate, UITableViewDataSource {
         cell.descriptionLabel.text = repo.description
         cell.backgroundColor = indexPath.row % 2 == 0 ? UIColor.veryLightGray() : .white
         
-        APIManager.shared.getData(endpoint: repo.owner.avatarURL) { (data, _) in
+        dataManager.getImageData(endpoint: repo.owner.avatarURL) { (data) in
+            // update UI on the main thread
             DispatchQueue.main.async {
                 if self.tableView.cellForRow(at: indexPath) == cell {
                     cell.profileImageView.image = UIImage(data: data)
@@ -101,8 +102,9 @@ extension ReposViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.cellForRow(at: indexPath)?.setSelected(false, animated: true)
         if let cell = tableView.cellForRow(at: indexPath) as? RepoTableViewCell {
-            let descriptionLabelHeight = cell.descriptionLabel.frame.height
             
+            // get the height of the description label and pass it to the detail page to dynamically size the tableHeader... kinda hacky
+            let descriptionLabelHeight = cell.descriptionLabel.frame.height
             let detailVC = RepoDetailViewController(dataManager: dataManager, repo: dataManager.repos[indexPath.row], descriptionLabelHeight: descriptionLabelHeight)
             if let navVC = navigationController {
                 navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.plain, target:nil, action:nil)

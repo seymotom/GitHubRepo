@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		69FC6677F10FF6653F3BFE57 /* Pods_GitHubRepos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78776FE02C0CD94AC69574F4 /* Pods_GitHubRepos.framework */; };
 		DE1162D91EF4963200F1B44B /* EmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE1162D81EF4963200F1B44B /* EmptyStateView.swift */; };
+		DEAD519C1EF56550002486B1 /* DetailLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEAD519B1EF56550002486B1 /* DetailLabel.swift */; };
 		DEAF68851EF1AECF00F2F565 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEAF68841EF1AECF00F2F565 /* AppDelegate.swift */; };
 		DEAF688C1EF1AECF00F2F565 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DEAF688B1EF1AECF00F2F565 /* Assets.xcassets */; };
 		DEAF688F1EF1AECF00F2F565 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DEAF688D1EF1AECF00F2F565 /* LaunchScreen.storyboard */; };
@@ -22,8 +23,6 @@
 		DEAF68AA1EF34BBC00F2F565 /* Link.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEAF68A91EF34BBC00F2F565 /* Link.swift */; };
 		DEAF68AC1EF40EE700F2F565 /* Issue.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEAF68AB1EF40EE700F2F565 /* Issue.swift */; };
 		DEAF68AE1EF41AC500F2F565 /* IssueDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEAF68AD1EF41AC500F2F565 /* IssueDataManager.swift */; };
-		DEAF68B21EF42AF600F2F565 /* PRDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEAF68B11EF42AF600F2F565 /* PRDataManager.swift */; };
-		DEAF68B61EF42CB700F2F565 /* PullRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEAF68B51EF42CB700F2F565 /* PullRequest.swift */; };
 		DEAF68B81EF4438900F2F565 /* RepoDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEAF68B71EF4438900F2F565 /* RepoDetailView.swift */; };
 		DEAF68BC1EF4666500F2F565 /* DetailSegmentedControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEAF68BB1EF4666400F2F565 /* DetailSegmentedControl.swift */; };
 		DEAF68C01EF47ECD00F2F565 /* PRIssueTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEAF68BF1EF47ECD00F2F565 /* PRIssueTableViewCell.swift */; };
@@ -34,6 +33,7 @@
 		78776FE02C0CD94AC69574F4 /* Pods_GitHubRepos.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GitHubRepos.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B8D7872BC7719068EF402219 /* Pods-GitHubRepos.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GitHubRepos.release.xcconfig"; path = "Pods/Target Support Files/Pods-GitHubRepos/Pods-GitHubRepos.release.xcconfig"; sourceTree = "<group>"; };
 		DE1162D81EF4963200F1B44B /* EmptyStateView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmptyStateView.swift; sourceTree = "<group>"; };
+		DEAD519B1EF56550002486B1 /* DetailLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailLabel.swift; sourceTree = "<group>"; };
 		DEAF68811EF1AECF00F2F565 /* GitHubRepos.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GitHubRepos.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DEAF68841EF1AECF00F2F565 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DEAF688B1EF1AECF00F2F565 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -49,8 +49,6 @@
 		DEAF68A91EF34BBC00F2F565 /* Link.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Link.swift; sourceTree = "<group>"; };
 		DEAF68AB1EF40EE700F2F565 /* Issue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Issue.swift; sourceTree = "<group>"; };
 		DEAF68AD1EF41AC500F2F565 /* IssueDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IssueDataManager.swift; sourceTree = "<group>"; };
-		DEAF68B11EF42AF600F2F565 /* PRDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PRDataManager.swift; sourceTree = "<group>"; };
-		DEAF68B51EF42CB700F2F565 /* PullRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PullRequest.swift; sourceTree = "<group>"; };
 		DEAF68B71EF4438900F2F565 /* RepoDetailView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RepoDetailView.swift; sourceTree = "<group>"; };
 		DEAF68BB1EF4666400F2F565 /* DetailSegmentedControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailSegmentedControl.swift; sourceTree = "<group>"; };
 		DEAF68BF1EF47ECD00F2F565 /* PRIssueTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PRIssueTableViewCell.swift; sourceTree = "<group>"; };
@@ -141,7 +139,6 @@
 				DEAF689A1EF1B89500F2F565 /* APIManager.swift */,
 				DEAF68A51EF1D0F700F2F565 /* DataManager.swift */,
 				DEAF68AD1EF41AC500F2F565 /* IssueDataManager.swift */,
-				DEAF68B11EF42AF600F2F565 /* PRDataManager.swift */,
 			);
 			name = Managers;
 			sourceTree = "<group>";
@@ -154,6 +151,7 @@
 				DEAF68BB1EF4666400F2F565 /* DetailSegmentedControl.swift */,
 				DEAF68BF1EF47ECD00F2F565 /* PRIssueTableViewCell.swift */,
 				DE1162D81EF4963200F1B44B /* EmptyStateView.swift */,
+				DEAD519B1EF56550002486B1 /* DetailLabel.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -165,7 +163,6 @@
 				DEAF68A31EF1C62900F2F565 /* User.swift */,
 				DEAF68A91EF34BBC00F2F565 /* Link.swift */,
 				DEAF68AB1EF40EE700F2F565 /* Issue.swift */,
-				DEAF68B51EF42CB700F2F565 /* PullRequest.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -297,7 +294,6 @@
 				DEAF68AE1EF41AC500F2F565 /* IssueDataManager.swift in Sources */,
 				DEAF68A81EF32DD400F2F565 /* RepoDetailViewController.swift in Sources */,
 				DEAF68C01EF47ECD00F2F565 /* PRIssueTableViewCell.swift in Sources */,
-				DEAF68B61EF42CB700F2F565 /* PullRequest.swift in Sources */,
 				DE1162D91EF4963200F1B44B /* EmptyStateView.swift in Sources */,
 				DEAF68971EF1AF6B00F2F565 /* ReposViewController.swift in Sources */,
 				DEAF68BC1EF4666500F2F565 /* DetailSegmentedControl.swift in Sources */,
@@ -307,9 +303,9 @@
 				DEAF68AC1EF40EE700F2F565 /* Issue.swift in Sources */,
 				DEAF68A11EF1C1D300F2F565 /* Repo.swift in Sources */,
 				DEAF68AA1EF34BBC00F2F565 /* Link.swift in Sources */,
-				DEAF68B21EF42AF600F2F565 /* PRDataManager.swift in Sources */,
 				DEAF68851EF1AECF00F2F565 /* AppDelegate.swift in Sources */,
 				DEAF689F1EF1BA8A00F2F565 /* RepoTableViewCell.swift in Sources */,
+				DEAD519C1EF56550002486B1 /* DetailLabel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

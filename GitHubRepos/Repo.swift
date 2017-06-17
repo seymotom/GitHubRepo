@@ -76,7 +76,9 @@ class Repo {
     static func makeRepos(from data: Data) -> [Repo]? {
         do {
             let json: Any = try JSONSerialization.jsonObject(with: data, options: [])
-            guard let arr = json as? [[String: AnyObject]] else { return nil }
+            guard let arr = json as? [[String: AnyObject]] else {
+                throw ParseError.fetchingReposError
+            }
             var repos: [Repo] = []
             for dict in arr {
                 if let repo = Repo(json: dict) {
@@ -84,6 +86,9 @@ class Repo {
                 }
             }
             return repos
+        }
+        catch ParseError.fetchingReposError {
+            print("Error occured while fetching repos")
         }
         catch let error as NSError {
             print("Error while parsing \(error)")

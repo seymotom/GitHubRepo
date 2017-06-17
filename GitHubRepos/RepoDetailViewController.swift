@@ -17,8 +17,8 @@ class RepoDetailViewController: UIViewController {
     var repo: Repo!
     var dataManager: DataManager!
     
-    let issueDataManager: IssueDataManager!
-    let prDataManager: PRDataManager!
+    let issueDataManager: PRIssueDataManager!
+    let prDataManager: PRIssueDataManager!
     
     var tableView: UITableView = UITableView()
     var repoDetailView: RepoDetailView!
@@ -36,8 +36,8 @@ class RepoDetailViewController: UIViewController {
     init(dataManager: DataManager, repo: Repo, descriptionLabelHeight: CGFloat) {
         self.repo = repo
         self.dataManager = dataManager
-        self.issueDataManager = IssueDataManager(endpoint: repo.issuesURL)
-        self.prDataManager = PRDataManager(endpoint: repo.pullRequestsURL)
+        self.issueDataManager = PRIssueDataManager(endpoint: repo.issuesURL)
+        self.prDataManager = PRIssueDataManager(endpoint: repo.pullRequestsURL)
         tableViewHeaderHeight = descriptionLabelHeight + RepoDetailView.detailHeight + RepoDetailView.profileImageWidth + (RepoDetailView.standardMargin * 4)
         
         super.init(nibName: nil, bundle: nil)
@@ -83,7 +83,7 @@ class RepoDetailViewController: UIViewController {
     }
     
     func loadIssues() {
-        issueDataManager.getMoreIssueData {
+        issueDataManager.getMoreData {
             DispatchQueue.main.async {
                 self.tableView.reloadData()
             }
@@ -91,7 +91,7 @@ class RepoDetailViewController: UIViewController {
     }
     
     func loadPullRequests() {
-        prDataManager.getMorePRData {
+        prDataManager.getMoreData {
             DispatchQueue.main.async {
                 self.tableView.reloadData()
             }
@@ -104,41 +104,31 @@ class RepoDetailViewController: UIViewController {
         
         repoDetailView.descriptionLabel.text = repo.description
         
-        APIManager.shared.getData(endpoint: repo.owner.avatarURL) { (data, _) in
+        dataManager.getImageData(endpoint: repo.owner.avatarURL) { (data) in
             DispatchQueue.main.async {
                 self.repoDetailView.profileImageView.image = UIImage(data: data)
             }
         }
         
-        dataManager.countResults(urlString: repo.issuesURL, field: .issuesURL) { (x) in
+        let urls = [repo.issuesURL, repo.pullRequestsURL, repo.branchesURL, repo.commitsURL, repo.releasesURL]
+        dataManager.countAllResults(urls: urls) { (detailCounts) in
             DispatchQueue.main.async {
-                self.totalIssues = x
-                self.repoDetailView.issuesLabel.text = "Issues\n\(String(x))"
-            }
-        }
-        
-        dataManager.countResults(urlString: repo.commitsURL, field: .commitsURL) { (x) in
-            DispatchQueue.main.async {
-                self.repoDetailView.commitsLabel.text = "Commits\n\(String(x))"
-            }
-        }
-        
-        dataManager.countResults(urlString: repo.pullRequestsURL, field: .pullRequestsURL) { (x) in
-            DispatchQueue.main.async {
-                self.totalPullRequests = x
-                self.repoDetailView.pullRequestsLabel.text = "Pull Req.\n\(String(x))"
-            }
-        }
-        
-        dataManager.countResults(urlString: repo.branchesURL, field: .branchesURL) { (x) in
-            DispatchQueue.main.async {
-                self.repoDetailView.branchesLabel.text = "Branches\n\(String(x))"
-            }
-        }
-        
-        dataManager.countResults(urlString: repo.releasesURL, field: .releasesURL) { (x) in
-            DispatchQueue.main.async {
-                self.repoDetailView.releasesLabel.text = "Releases\n\(String(x))"
+                for count in detailCounts {
+                    switch count.0 {
+                    case self.repo.issuesURL:
+                        self.repoDetailView.issuesLabel.text = "Issues\n\(String(count.1))"
+                    case self.repo.pullRequestsURL:
+                        self.repoDetailView.pullRequestsLabel.text = "Pull Req.\n\(String(count.1))"
+                    case self.repo.branchesURL:
+                        self.repoDetailView.branchesLabel.text = "Branches\n\(String(count.1))"
+                    case self.repo.commitsURL:
+                        self.repoDetailView.commitsLabel.text = "Commits\n\(String(count.1))"
+                    case self.repo.releasesURL:
+                        self.repoDetailView.releasesLabel.text = "Releases\n\(String(count.1))"
+                    default:
+                        break
+                    }
+                }
             }
         }
     }
@@ -146,13 +136,13 @@ class RepoDetailViewController: UIViewController {
     func toggleEmptyStateView() {
         switch repoDisplayType {
         case.issues:
-            if issueDataManager.issues.isEmpty {
+            if issueDataManager.objects.isEmpty {
                 tableView.backgroundView = EmptyStateView(frame: tableView.frame, text: "No Results to Display")
             } else {
                 tableView.backgroundView = nil
             }
         case .pullRequests:
-            if prDataManager.pullRequests.isEmpty {
+            if prDataManager.objects.isEmpty {
                 tableView.backgroundView = EmptyStateView(frame: tableView.frame, text: "No Results to Display")
             } else {
                 tableView.backgroundView = nil
@@ -173,18 +163,16 @@ extension RepoDetailViewController: DetailSegmentedControlDelegate, RepoDetailVi
     }
 }
 
-
-
 extension RepoDetailViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch repoDisplayType {
         case .issues:
             toggleEmptyStateView()
-            return issueDataManager.issues.count
+            return issueDataManager.objects.count
         case .pullRequests:
             toggleEmptyStateView()
-            return prDataManager.pullRequests.count
+            return prDataManager.objects.count
         }
     }
     
@@ -199,57 +187,36 @@ extension RepoDetailViewController: UITableViewDataSource, UITableViewDelegate {
         case .issues:
             // if there are more issues to load, load them
             if let total = totalIssues,
-                indexPath.row == issueDataManager.issues.count - 1,
-                issueDataManager.issues.count < total {
+                indexPath.row == issueDataManager.objects.count - 1,
+                issueDataManager.objects.count < total {
                 loadIssues()
             }
         case .pullRequests:
             if let total = totalPullRequests,
-                indexPath.row == prDataManager.pullRequests.count - 1,
-                prDataManager.pullRequests.count < total {
+                indexPath.row == prDataManager.objects.count - 1,
+                prDataManager.objects.count < total {
                 loadPullRequests()
             }
         }
     }
     
     func configureCell(_ cell: PRIssueTableViewCell, for indexPath: IndexPath) -> PRIssueTableViewCell {
-        switch repoDisplayType {
-        case .issues:
-            let object = issueDataManager.issues[indexPath.row]
-            cell.profileImageView.image = nil
-            cell.titleLabel.text = object.title
-            cell.bodyLabel.text = object.body
-            cell.dateLabel.text = object.createdDateString
-            cell.userLabel.text = object.user.userName
-            cell.backgroundColor = indexPath.row % 2 == 0 ? UIColor.veryLightGray() : .white
-            
-            APIManager.shared.getData(endpoint: object.user.avatarURL) { (data, _) in
-                DispatchQueue.main.async {
-                    if self.tableView.cellForRow(at: indexPath) == cell {
-                        cell.profileImageView.image = UIImage(data: data)
-                    }
+        let object = repoDisplayType == .issues ? issueDataManager.objects[indexPath.row] : prDataManager.objects[indexPath.row]
+        cell.profileImageView.image = nil
+        cell.titleLabel.text = object.title
+        cell.bodyLabel.text = object.body
+        cell.dateLabel.text = object.createdDateString
+        cell.userLabel.text = object.user.userName
+        cell.backgroundColor = indexPath.row % 2 == 0 ? UIColor.veryLightGray() : .white
+        
+        dataManager.getImageData(endpoint: object.user.avatarURL) { (data) in
+            DispatchQueue.main.async {
+                if self.tableView.cellForRow(at: indexPath) == cell {
+                    cell.profileImageView.image = UIImage(data: data)
                 }
             }
-            return cell
-            
-        case .pullRequests:
-            let object = prDataManager.pullRequests[indexPath.row]
-            cell.profileImageView.image = nil
-            cell.titleLabel.text = object.title
-            cell.bodyLabel.text = object.body
-            cell.dateLabel.text = object.createdDateString
-            cell.userLabel.text = object.user.userName
-            cell.backgroundColor = indexPath.row % 2 == 0 ? UIColor.veryLightGray() : .white
-            
-            APIManager.shared.getData(endpoint: object.user.avatarURL) { (data, _) in
-                DispatchQueue.main.async {
-                    if self.tableView.cellForRow(at: indexPath) == cell {
-                        cell.profileImageView.image = UIImage(data: data)
-                    }
-                }
-            }
-            return cell
         }
+        return cell
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -260,20 +227,14 @@ extension RepoDetailViewController: UITableViewDataSource, UITableViewDelegate {
         return segmentedControlHeight
     }
     
+    // open gitHub for the selected issue or pr
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.cellForRow(at: indexPath)?.setSelected(false, animated: true)
-        switch repoDisplayType {
-        case .issues:
-            if let url = URL(string: issueDataManager.issues[indexPath.row].websiteURL) {
-                UIApplication.shared.open(url, options: [:], completionHandler: nil)
-            }
-        case .pullRequests:
-            if let url = URL(string: prDataManager.pullRequests[indexPath.row].websiteURL) {
-                UIApplication.shared.open(url, options: [:], completionHandler: nil)
-            }
+        let urlString = repoDisplayType == .issues ? issueDataManager.objects[indexPath.row].websiteURL : prDataManager.objects[indexPath.row].websiteURL
+        if let url = URL(string: urlString) {
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
         }
+        
     }
-
-    
 }
 

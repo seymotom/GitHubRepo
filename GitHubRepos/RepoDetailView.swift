@@ -100,7 +100,7 @@ class RepoDetailView: UIView {
     // MARK: Lazy UI
     
     lazy var profileImageView: UIImageView = {
-       let view = UIImageView()
+        let view = UIImageView()
         view.clipsToBounds = true
         view.layer.cornerRadius = 10
         return view
@@ -108,73 +108,15 @@ class RepoDetailView: UIView {
     
     lazy var descriptionLabel: UILabel = {
         let label = UILabel()
-       label.numberOfLines = 0
+        label.numberOfLines = 0
         label.font = UIFont.systemFont(ofSize: 12)
         label.textAlignment = .center
         return label
     }()
     
-    // TODO: Refactor the repeated code
-    
-    lazy var issuesLabel: UILabel = {
-        let label = UILabel()
-        label.numberOfLines = 2
-        label.font = UIFont.systemFont(ofSize: 12)
-        label.textAlignment = .center
-        label.layer.borderWidth = 1
-        label.layer.borderColor = UIColor.lightGray.cgColor
-        label.layer.cornerRadius = 3
-        label.clipsToBounds = true
-        return label
-    }()
-
-    lazy var commitsLabel: UILabel = {
-        let label = UILabel()
-        label.numberOfLines = 2
-        label.font = UIFont.systemFont(ofSize: 12)
-        label.textAlignment = .center
-        label.layer.borderWidth = 1
-        label.layer.borderColor = UIColor.lightGray.cgColor
-        label.layer.cornerRadius = 3
-        label.clipsToBounds = true
-        return label
-    }()
-    
-    lazy var pullRequestsLabel: UILabel = {
-        let label = UILabel()
-        label.numberOfLines = 2
-        label.font = UIFont.systemFont(ofSize: 12)
-        label.textAlignment = .center
-        label.layer.borderWidth = 1
-        label.layer.borderColor = UIColor.lightGray.cgColor
-        label.layer.cornerRadius = 3
-        label.clipsToBounds = true
-        return label
-    }()
-    
-    lazy var branchesLabel: UILabel = {
-        let label = UILabel()
-        label.numberOfLines = 2
-        label.font = UIFont.systemFont(ofSize: 12)
-        label.textAlignment = .center
-        label.layer.borderWidth = 1
-        label.layer.borderColor = UIColor.lightGray.cgColor
-        label.layer.cornerRadius = 3
-        label.clipsToBounds = true
-        return label
-    }()
-    
-    lazy var releasesLabel: UILabel = {
-        let label = UILabel()
-        label.numberOfLines = 2
-        label.font = UIFont.systemFont(ofSize: 12)
-        label.textAlignment = .center
-        label.layer.borderWidth = 1
-        label.layer.borderColor = UIColor.lightGray.cgColor
-        label.layer.cornerRadius = 3
-        label.clipsToBounds = true
-        return label
-    }()
-    
-
+    var issuesLabel = DetailLabel()
+    var commitsLabel = DetailLabel()
+    var pullRequestsLabel = DetailLabel()
+    var branchesLabel = DetailLabel()
+    var releasesLabel = DetailLabel()
 }

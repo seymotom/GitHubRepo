@@ -8,25 +8,25 @@
 
 import Foundation
 
-class IssueDataManager {
+class PRIssueDataManager {
     
-    private var issueEndpoints: [String]!
+    private var endpoints: [String]!
     
-    var issues: [Issue] = []
+    var objects: [PRIssue] = []
     
     init(endpoint: String) {
-        self.issueEndpoints = [endpoint]
+        self.endpoints = [endpoint]
     }
     
-    func getMoreIssueData(completion: @escaping () -> Void) {
-        APIManager.shared.getData(endpoint: issueEndpoints.last!){ (data: Data, linkHeader: String?) in
-            if let issues = Issue.makeIssues(from: data) {
-                self.issues += issues
+    func getMoreData(completion: @escaping () -> Void) {
+        APIManager.shared.getData(endpoint: endpoints.last!){ (data: Data, linkHeader: String?) in
+            if let prIssues = PRIssue.makePRIssues(from: data) {
+                self.objects += prIssues
             }
             if let fullLink = linkHeader,
                 let link = Link.getLink(for: .next, linkHeader: fullLink),
-                link.urlString != self.issueEndpoints.last! {
-                self.issueEndpoints.append(link.urlString)
+                link.urlString != self.endpoints.last! {
+                self.endpoints.append(link.urlString)
             }
             completion()
         }

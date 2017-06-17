@@ -16,7 +16,7 @@ struct Link {
     let rel: Rel
     let urlString: String
     
-    // returns the link object of the requested rel type
+    // returns a link struct of the requested rel type
     static func getLink(for rel: Rel, linkHeader: String) -> Link? {
         let fullLinks = linkHeader.components(separatedBy: ", ")
         for fullLink in fullLinks {

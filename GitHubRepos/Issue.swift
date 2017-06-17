@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum IssueField: String {
+enum PRIssueField: String {
     case websiteURL = "html_url"
     case title = "title"
     case user = "user"
@@ -18,7 +18,7 @@ enum IssueField: String {
     case state = "state"
 }
 
-class Issue {
+class PRIssue {
     let title: String
     let body: String
     let number: Int
@@ -46,35 +46,41 @@ class Issue {
     
     convenience init?(json: [String: AnyObject]) {
         guard
-            let title = json[IssueField.title.rawValue] as? String,
-            let fullBody = json[IssueField.body.rawValue] as? String,
-            let number = json[IssueField.number.rawValue] as? Int,
-            let websiteURL = json[IssueField.websiteURL.rawValue] as? String,
-            let state = json[IssueField.state.rawValue] as? String,
-            let userDict = json[IssueField.user.rawValue] as? [String: AnyObject],
+            let title = json[PRIssueField.title.rawValue] as? String,
+            let fullBody = json[PRIssueField.body.rawValue] as? String,
+            let number = json[PRIssueField.number.rawValue] as? Int,
+            let websiteURL = json[PRIssueField.websiteURL.rawValue] as? String,
+            let state = json[PRIssueField.state.rawValue] as? String,
+            let userDict = json[PRIssueField.user.rawValue] as? [String: AnyObject],
             let user = User(json: userDict),
-            let created = json[IssueField.createdDate.rawValue] as? String,
+            let created = json[PRIssueField.createdDate.rawValue] as? String,
             let createdDate = created.dateFromISO8601
         else {
              return nil
         }
-        let body = fullBody.characters.count > 140 ? String(fullBody.characters.dropLast(fullBody.characters.count - 140)) + "..." : fullBody
+        // the body of an issue or pr can be very long. Limit it to 200 charactes.
+        let body = fullBody.characters.count > 200 ? String(fullBody.characters.dropLast(fullBody.characters.count - 200)) + "..." : fullBody
         self.init(title: title, body: body, number: number, user: user,
                   websiteURL: websiteURL, createdDate: createdDate, state: state)
     }
     
     // returns an array of Repos from data.
-    static func makeIssues(from data: Data) -> [Issue]? {
+    static func makePRIssues(from data: Data) -> [PRIssue]? {
         do {
             let json: Any = try JSONSerialization.jsonObject(with: data, options: [])
-            guard let arr = json as? [[String: AnyObject]] else { return nil }
-            var issues: [Issue] = []
+            guard let arr = json as? [[String: AnyObject]] else {
+                throw ParseError.fetchingPRIssue
+            }
+            var prIssues: [PRIssue] = []
             for dict in arr {
-                if let issue = Issue(json: dict) {
-                    issues.append(issue)
+                if let prIssue = PRIssue(json: dict) {
+                    prIssues.append(prIssue)
                 }
             }
-            return issues
+            return prIssues
+        }
+        catch ParseError.fetchingPRIssue {
+            print("Error occured while fetching PRIssues")
         }
         catch let error as NSError {
             print("Error while parsing \(error)")

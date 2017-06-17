@@ -33,6 +33,7 @@ class EmptyStateView: UIView {
     func configureConstraints() {
         textLabel.snp.makeConstraints { (view) in
             view.centerX.equalToSuperview()
+            // a third of the way up the screen is about the center of the empty section. Would like to make this dynamic with the tableHeader.
             view.bottom.equalToSuperview().inset(UIScreen.main.bounds.height / 3)
         }
     }
