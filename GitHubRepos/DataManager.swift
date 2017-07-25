@@ -14,7 +14,6 @@ enum ParseError: Error {
     case fetchingPRIssue
 }
 
-
 class DataManager {
     
     var repos: [Repo] = []

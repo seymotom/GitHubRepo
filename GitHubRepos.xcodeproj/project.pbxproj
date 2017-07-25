@@ -161,8 +161,8 @@
 			children = (
 				DEAF68A01EF1C1D300F2F565 /* Repo.swift */,
 				DEAF68A31EF1C62900F2F565 /* User.swift */,
-				DEAF68A91EF34BBC00F2F565 /* Link.swift */,
 				DEAF68AB1EF40EE700F2F565 /* Issue.swift */,
+				DEAF68A91EF34BBC00F2F565 /* Link.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
